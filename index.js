@@ -25,6 +25,6 @@ authRoutes(app);
 //Client Id: 945078027571-7q5s9ajjc5h5kfktre02hl6l1lolfmpq.apps.googleusercontent.com
 //Client Secret : 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
 
-mongoose.connect(keys.mongodb);
+mongoose.connect(keys.mongoURI);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
