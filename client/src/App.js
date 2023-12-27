@@ -1,33 +1,32 @@
-import logo from "./logo.svg";
 import "./App.css";
+import { Provider, connect } from "react-redux";
+import * as actions from "./actions";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="App-link"
-          href="/auth/google"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Sign in with Google
-        </a>
-      </header>
-    </div>
-  );
+import { BrowserRouter, Route } from "react-router-dom";
+import Header from "./components/header";
+import reducers from "./reducers";
+import Landing from "./components/landing";
+import { Component } from "react";
+
+const Dashboard = () => <h2>Dashboard</h2>;
+const SurveyNew = () => <h2>SurveyNew</h2>;
+
+class App extends Component {
+  componentDidMount() {
+    this.props.fetchUser();
+  }
+  render() {
+    return (
+      <BrowserRouter>
+        <div>
+          <Header />
+          <Route exact={true} path="/" component={Landing} />
+          <Route exact path="/surveys" component={Dashboard} />
+          <Route path="/surveys/new" component={SurveyNew} />
+        </div>
+      </BrowserRouter>
+    );
+  }
 }
 
-export default App;
+export default connect(null, actions)(App);
