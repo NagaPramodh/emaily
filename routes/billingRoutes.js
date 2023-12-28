@@ -3,13 +3,23 @@ const stripe = require("stripe")(keys.stripeSecretKey);
 
 module.exports = (app) => {
   app.post("/api/stripe", async (req, res) => {
-    // console.log(req.body, "body");
-    const charge = await stripe.charges.create({
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: 500,
       currency: "usd",
-      description: "5 dollars",
-      source: req.body.id,
+      description: "$5 for 5 credits",
+      automatic_payment_methods: { enabled: true, allow_redirects: "never" },
+      payment_method_data: {
+        type: "card",
+        card: {
+          token: req.body.id,
+        },
+      },
+      // confirmation_method: "manual",
+      confirm: "true",
     });
-    console.log(charge, "charge");
+    req.user.credits += 5;
+    const user = await req.user.save();
+    res.send(user);
+    // console.log(paymentIntent, "paymentIntent");
   });
 };
