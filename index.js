@@ -29,6 +29,15 @@ authRoutes(app);
 billingRoutes(app);
 //Client Id: 945078027571-7q5s9ajjc5h5kfktre02hl6l1lolfmpq.apps.googleusercontent.com
 //Client Secret : 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
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+
+  const path = require("path");
+}
 
 mongoose.connect(keys.mongoURI);
 const PORT = process.env.PORT || 5000;
